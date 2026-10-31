@@ -34,6 +34,36 @@
   z-index: 2;
 }
 
+.intro {
+  position: absolute;
+  inset: calc(var(--nav-h) + 3svh) 0 auto;
+  z-index: 0;
+  text-align: center;
+  user-select: none;
+  animation: rise 1s var(--ease-out) both;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.name {
+  margin: 0;
+  font-size: clamp(56px, 12.5vw, 196px);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  background: linear-gradient(to bottom, var(--ink) 25%, rgba(237, 237, 237, 0.22));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .stage {
   position: absolute;
   left: 50%;
@@ -51,6 +81,13 @@
   left: 64%;
   bottom: 57%;
   z-index: 3;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 
 @keyframes arrive {
@@ -71,6 +108,15 @@
     bottom: calc(var(--dock-h) + 30px - var(--stage) * 0.33);
   }
 
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+  }
+
+  .name {
+    font-size: clamp(44px, 13vw, 120px);
+  }
+
   .bubble {
     --w: min(clamp(290px, 40vw, 340px), calc(100vw - 2 * var(--gutter)));
     --lines: 5;
@@ -80,6 +126,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .intro,
   .stage {
     animation: none;
   }

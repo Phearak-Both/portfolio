@@ -1,6 +1,6 @@
 # PhearakBoth
 
-Personal portfolio: AI / ML engineer in the making.
+Personal portfolio: AI engineer.
 
 A dark, editorial single page with a living avatar, a hello in a terminal-style speech balloon
 on page load, and a chat dock for "PhearakBoth's AI Twin".

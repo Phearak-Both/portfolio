@@ -22,6 +22,12 @@ export function Hero({ ref, message, expression, onCloseBubble }: HeroProps) {
         {site.brand}, {site.role}
       </h1>
 
+      {/* Role and name, large, behind his head. Decorative: the h1 above carries them. */}
+      <div className={styles.intro} aria-hidden="true">
+        <p className={styles.eyebrow}>{site.role}</p>
+        <p className={styles.name}>{site.brand}</p>
+      </div>
+
       <div className={styles.stage}>
         <Avatar expression={expression} />
         <SpeechBubble

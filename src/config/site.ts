@@ -6,7 +6,7 @@ import type { Expression } from './expressions';
  */
 export const site = {
   brand: 'PhearakBoth',
-  role: 'AI / ML Engineer in the making',
+  role: 'AI Engineer',
   tagline: 'Building intelligent systems. Making them useful.',
 
   /** What the avatar says when the homepage opens. Set to null to skip. */
