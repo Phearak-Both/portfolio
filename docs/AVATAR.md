@@ -89,7 +89,7 @@ Images are kept in two places:
 | Folder | What's in it |
 | --- | --- |
 | `source-images/memoji/` | Original background-removed 4K PNGs: `hero`, and `about`, `projects`, `contact` each as `-idle` / `-speaking`. |
-| `source-images/props/` | Other source art (`laptop.png`). |
+| `source-images/props/` | Other source art (`laptop.png`, `board.png`). |
 | `src/assets/memoji/`, `src/assets/props/` | The web-ready WebP/PNG files the site imports, generated from the sources with the same names. |
 
 The sources line up exactly with the images the landmarks were traced on (the hero and About /
@@ -109,6 +109,8 @@ node scripts/prepare-images.mjs --crop --width=1600 source-images/memoji/project
 node scripts/prepare-images.mjs --width=1920 --height=1536 source-images/memoji/contact-idle.png:src/assets/memoji/contact-idle.webp source-images/memoji/contact-speaking.png:src/assets/memoji/contact-speaking.webp
 # The laptop on the Projects page:
 node scripts/prepare-images.mjs --crop --width=1600 source-images/props/laptop.png:src/assets/props/laptop.webp
+# The chalkboard in About (if its crop changes, update the frame slices in About.module.css):
+node scripts/prepare-images.mjs --crop --width=1600 source-images/props/board.png:src/assets/props/board.webp
 # Favicons from the hero cut-out:
 node scripts/build-favicon.mjs src/assets/memoji/hero.webp public
 ```

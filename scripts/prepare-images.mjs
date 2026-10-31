@@ -12,6 +12,7 @@
 //   node scripts/prepare-images.mjs --crop --width=1600 source-images/memoji/projects-idle.png:src/assets/memoji/projects-idle.webp source-images/memoji/projects-speaking.png:src/assets/memoji/projects-speaking.webp
 //   node scripts/prepare-images.mjs --width=1920 --height=1536 source-images/memoji/contact-idle.png:src/assets/memoji/contact-idle.webp source-images/memoji/contact-speaking.png:src/assets/memoji/contact-speaking.webp
 //   node scripts/prepare-images.mjs --crop --width=1600 source-images/props/laptop.png:src/assets/props/laptop.webp
+//   node scripts/prepare-images.mjs --crop --width=1600 source-images/props/board.png:src/assets/props/board.webp
 import sharp from 'sharp';
 
 const args = process.argv.slice(2);

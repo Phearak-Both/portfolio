@@ -14,6 +14,9 @@
   --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  /* Chalk on the About board: a sketchy display face and a readable hand. */
+  --font-chalk-display: 'Cabin Sketch', 'Patrick Hand', cursive;
+  --font-chalk: 'Patrick Hand', 'Comic Sans MS', cursive;
 
   --gutter: clamp(16px, 4vw, 40px);
   --measure: 1120px;
