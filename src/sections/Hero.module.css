@@ -1,0 +1,86 @@
+.hero {
+  --stage: min(calc(100svh - var(--nav-h) + 40px), 94vw, 900px);
+  position: relative;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(70% 60% at 50% 45%, #18181a 0%, transparent 70%),
+    linear-gradient(to bottom, var(--bg) 0%, #0e0e10 60%, var(--bg) 100%);
+}
+
+/* Blueprint grid, fading out from the centre. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 50% 0 / 56px 56px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 50% 0 / 56px 56px;
+  mask-image: radial-gradient(70% 65% at 50% 42%, #000 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(70% 65% at 50% 42%, #000 30%, transparent 80%);
+}
+
+/* Lets the torso fade into the page. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 26%;
+  background: linear-gradient(to bottom, transparent, var(--bg) 85%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.stage {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--stage) * -0.08);
+  width: var(--stage);
+  z-index: 1;
+  transform: translateX(-50%);
+  animation: arrive 1.2s 0.1s var(--ease-out) both;
+}
+
+/* Desktop: the balloon floats off the right of the face, tail toward the cheek. */
+.bubble {
+  --w: clamp(270px, 25vw, 350px);
+  --lines: 7;
+  left: 64%;
+  bottom: 57%;
+  z-index: 3;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Tablet & phone: stack the composition; size the head to the space
+   between the nav and the chat dock. Shoulders may crop. */
+@media (max-width: 900px) {
+  .hero {
+    --stage: min(165vw, calc(100svh - var(--nav-h) - 110px), 900px);
+    min-height: 600px;
+  }
+
+  .stage {
+    bottom: calc(var(--dock-h) + 30px - var(--stage) * 0.33);
+  }
+
+  .bubble {
+    --w: min(clamp(290px, 40vw, 340px), calc(100vw - 2 * var(--gutter)));
+    --lines: 5;
+    left: calc(50% - var(--w) * 0.6);
+    bottom: 91%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    animation: none;
+  }
+}

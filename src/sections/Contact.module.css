@@ -1,0 +1,227 @@
+/* The whole cut-out photo, fitted on the black page below the nav. */
+.scene {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  /* The chat dock floats over the faded bottom edge, so the photo can run behind it. */
+  padding: calc(var(--nav-h) + 8px) var(--gutter) 8px;
+  overflow: hidden;
+  /* The page black, so the scene runs seamlessly into the sections around it. */
+  background: var(--bg);
+}
+/* Phones: the photo spans the width and the scene takes its height (set from the script). */
+@media (max-width: 760px) {
+  .scene {
+    min-height: 0;
+    /* Edge to edge: the photo's sides already fade out. Room on top for his balloon. */
+    padding: 120px 0 24px;
+  }
+}
+
+.photos {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  aspect-ratio: 600 / 480;
+  user-select: none;
+  /* The two poses blend with each other, not with the page. */
+  isolation: isolate;
+  /* The images are cropped through the chair and desk at their left, right
+     and bottom edges; fade those into the black instead of a hard line. */
+  mask-image:
+    linear-gradient(to right, transparent, #000 7%, #000 93%, transparent),
+    linear-gradient(to bottom, #000 80%, transparent);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 7%, #000 93%, transparent),
+    linear-gradient(to bottom, #000 80%, transparent);
+  -webkit-mask-composite: source-in;
+}
+
+/* He turns round to talk: a true crossfade, as in the About and Projects
+   scenes (plus-lighter keeps what both poses share solid). */
+.photo {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: plus-lighter;
+  will-change: opacity;
+  transition: opacity 0.6s cubic-bezier(0.45, 0, 0.55, 1);
+}
+.photo[data-pose='speaking'],
+.scene[data-speaking] .photo[data-pose='quiet'] {
+  opacity: 0;
+}
+.scene[data-speaking] .photo[data-pose='speaking'] {
+  opacity: 1;
+}
+
+/* The balloon hangs off a point beside his head; its tail's tip sits on that point. */
+.say {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 2;
+}
+.bubble {
+  --w: clamp(240px, 22vw, 300px);
+  --lines: 4;
+  left: calc(var(--w) * -0.18);
+  bottom: 0;
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    transition: none;
+  }
+}
+
+/* The laptop screen, switched on. Laid out flat, then warped onto the screen's corners. */
+.screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 24px 16px;
+  /* The bezel, drawn here so the lid's outline is crisp. */
+  border: 7px solid #050505;
+  border-radius: 13px;
+  /* The lid grown a little past the photo's on top and at the sides, with a
+     clean aluminium edge round it, drawn over the photo's own rim and the
+     cut-out's jagged light fringe. The bottom stays put: the hands are just
+     below it. */
+  --rim-x: 3px;
+  --rim-r: 7px;
+  --rim-y: 2.5px;
+  --metal: 2.5px;
+  --metal-x: calc(var(--rim-x) + var(--metal));
+  --metal-r: calc(var(--rim-r) + var(--metal));
+  --metal-y: calc(var(--rim-y) + var(--metal));
+  box-shadow:
+    calc(-1 * var(--rim-x)) 0 0 #050505,
+    var(--rim-r) 0 0 #050505,
+    0 calc(-1 * var(--rim-y)) 0 #050505,
+    calc(-1 * var(--rim-x)) calc(-1 * var(--rim-y)) 0 #050505,
+    var(--rim-r) calc(-1 * var(--rim-y)) 0 #050505,
+    calc(-1 * var(--metal-x)) 0 0 #9fa2a8,
+    var(--metal-r) 0 0 #9fa2a8,
+    0 calc(-1 * var(--metal-y)) 0 #b4b7bd,
+    calc(-1 * var(--metal-x)) calc(-1 * var(--metal-y)) 0 #b4b7bd,
+    var(--metal-r) calc(-1 * var(--metal-y)) 0 #b4b7bd;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(237, 237, 237, 0.07), transparent 60%),
+    #0e0e10;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.3;
+  visibility: hidden;
+}
+.screen[data-ready] {
+  visibility: visible;
+}
+
+.bar {
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-mute);
+}
+
+.links {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each social is a card on the screen. */
+.links a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  row-gap: 3px;
+  padding: 10px 14px;
+  border: 1px solid rgba(237, 237, 237, 0.16);
+  border-radius: 10px;
+  background: rgba(237, 237, 237, 0.04);
+  text-decoration: none;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+.links a:hover {
+  border-color: rgba(237, 237, 237, 0.4);
+  background: rgba(237, 237, 237, 0.09);
+}
+.links a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.label {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.value {
+  grid-column: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-mute);
+  overflow-wrap: anywhere;
+}
+
+.arrow {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  font-size: 18px;
+  color: var(--ink-mute);
+  transition:
+    transform 0.25s var(--ease-out),
+    color 0.25s;
+}
+.links a:hover .arrow {
+  transform: translate(2px, -2px);
+  color: var(--ink);
+}
+
+/* Compact: on a small screen only the links show, as big buttons. */
+.screen[data-compact] {
+  justify-content: center;
+  padding: 12px 14px;
+  border-width: 4px;
+  border-radius: 8px;
+  /* Half the layout size, so half the rim. */
+  --rim-x: 1.5px;
+  --rim-r: 3.5px;
+  --rim-y: 1.25px;
+  --metal: 1.25px;
+}
+.screen[data-compact] .bar,
+.screen[data-compact] .value {
+  display: none;
+}
+.screen[data-compact] .links {
+  gap: 8px;
+}
+.screen[data-compact] .links a {
+  padding: 8px 12px;
+}
+.screen[data-compact] .label,
+.screen[data-compact] .arrow {
+  font-size: 20px;
+}

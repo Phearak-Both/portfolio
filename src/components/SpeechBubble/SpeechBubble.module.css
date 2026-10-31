@@ -1,0 +1,231 @@
+.bubble {
+  --w: 300px;
+  /* Lines shown before long text starts scrolling. */
+  --lines: 6;
+  --panel: rgba(16, 16, 18, 0.94);
+  --panel-line: rgba(237, 237, 237, 0.3);
+  position: absolute;
+  width: var(--w);
+  min-height: calc(var(--w) * 0.34);
+  display: flex;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px) scale(0.97);
+  transform-origin: 12% 100%;
+  transition:
+    opacity 0.16s var(--ease-out),
+    transform 0.2s var(--ease-out);
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.55));
+}
+
+.bubble[data-visible] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.14s var(--ease-out),
+    transform 0.26s var(--ease-out);
+}
+
+/* Close button in the top-right corner; the text keeps clear of it. */
+.close {
+  position: absolute;
+  top: calc(var(--w) * 0.02);
+  right: calc(var(--w) * 0.02);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--ink-mute);
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background-color 0.15s;
+}
+.close:hover {
+  color: var(--ink);
+  background: rgba(237, 237, 237, 0.08);
+}
+.close svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.bubble[data-visible] .close {
+  pointer-events: auto;
+}
+.bubble[data-closable] .text {
+  padding-right: calc(var(--w) * 0.02 + 30px);
+}
+
+.bubble[data-tail='right'] {
+  transform-origin: 88% 100%;
+}
+.bubble[data-tail='right'] .shape {
+  transform: scaleX(-1);
+}
+
+.shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+
+.shape path {
+  fill: var(--panel);
+  stroke: var(--panel-line);
+  stroke-width: 1px;
+  stroke-linejoin: miter;
+}
+
+/* Text sits inside the panel, clear of the tail. */
+.text {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  padding: calc(var(--w) * 0.06) calc(var(--w) * 0.06) calc(var(--w) * 0.14);
+  display: flex;
+  align-items: center;
+  text-align: left;
+  color: var(--ink);
+  /* Proportional sans reads faster than mono over several lines; mono stays for the prompt. */
+  font-family: var(--font-sans);
+  font-size: calc(var(--w) * 0.047);
+  font-weight: 400;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.bullet {
+  padding-left: 1.1em;
+  text-indent: -1.1em;
+}
+.marker {
+  display: inline-block;
+  width: 1.1em;
+  text-indent: 0;
+}
+.bullet + .bullet {
+  margin-top: 0.3em;
+}
+
+.gap {
+  height: 0.6em;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  max-height: calc(var(--lines) * 1lh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(237, 237, 237, 0.25) transparent;
+}
+/* Only the text takes the pointer, and only while the balloon is showing. */
+.bubble[data-visible] .screen {
+  pointer-events: auto;
+}
+.screen::-webkit-scrollbar {
+  width: 4px;
+}
+.screen::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: rgba(237, 237, 237, 0.25);
+}
+.screen[data-scrolled] {
+  mask-image: linear-gradient(transparent, #000 0.7lh);
+  -webkit-mask-image: linear-gradient(transparent, #000 0.7lh);
+}
+
+.prompt {
+  margin-right: 0.5em;
+  font-family: var(--font-mono);
+  color: var(--ink-mute);
+  font-weight: 400;
+}
+
+/* Untyped characters keep their space so lines never reflow while typing. */
+.text [data-hidden] {
+  visibility: hidden;
+}
+
+/* Block cursor after the last typed character; out of flow so it can't shift text. */
+.caret {
+  position: relative;
+  display: inline-block;
+  width: 0;
+}
+.caret::after {
+  content: '';
+  position: absolute;
+  left: 0.15ch;
+  bottom: -0.15em;
+  width: 0.55ch;
+  height: 1.05em;
+  background: var(--ink);
+  opacity: 0.85;
+}
+.caret[data-idle]::after {
+  animation: caret 1s steps(1) infinite;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.wave {
+  display: inline-block;
+  transform-origin: 70% 80%;
+  animation: wave 1.6s 0.25s ease-in-out 2;
+}
+
+@keyframes wave {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10%,
+  30% {
+    transform: rotate(16deg);
+  }
+  20%,
+  40% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave,
+  .caret[data-idle]::after {
+    animation: none;
+  }
+}
+
+@keyframes swap {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}

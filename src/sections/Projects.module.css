@@ -1,0 +1,41 @@
+/* Heading and the laptop (the projects open on its screen) on the left, the Memoji at his desk on the right. */
+.top {
+  --standee-w: clamp(260px, 30vw, 400px);
+  --standee-bubble-w: 300px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--standee-w);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: end;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 3vw, 40px);
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* The balloon's room above his head can sit in the section's top padding. */
+.side {
+  margin-top: -100px;
+}
+
+/* Tablet: the laptop gets the full width, he sits below it on the right. */
+@media (max-width: 1100px) {
+  .top {
+    --standee-w: min(330px, 70vw);
+    --standee-bubble-w: min(290px, calc(100vw - 2 * var(--gutter)));
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .side {
+    justify-self: end;
+    margin-top: 0;
+  }
+}

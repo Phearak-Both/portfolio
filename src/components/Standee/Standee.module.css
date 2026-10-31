@@ -1,0 +1,209 @@
+/* Width comes from --standee-w; the balloon matches it. Room above the head is for the balloon. */
+.standee {
+  --bubble-space: 150px;
+  /* Quiet <-> speaking: a slow, symmetric ease so the face dissolves instead of popping. */
+  --pose-fade: 0.6s;
+  --pose-ease: cubic-bezier(0.45, 0, 0.55, 1);
+  position: relative;
+  width: var(--standee-w, 260px);
+  padding-top: var(--bubble-space);
+}
+
+/* Soft studio light behind him; brighter while he's talking. */
+.glow {
+  position: absolute;
+  left: -45%;
+  right: -45%;
+  top: calc(var(--bubble-space) - 4%);
+  bottom: 4%;
+  background:
+    radial-gradient(42% 30% at 50% 22%, rgba(237, 237, 237, 0.13), transparent 70%),
+    radial-gradient(38% 50% at 50% 55%, rgba(237, 237, 237, 0.06), transparent 75%);
+  pointer-events: none;
+  animation: glow 7s ease-in-out infinite;
+  filter: brightness(1);
+  transition: filter var(--pose-fade) var(--pose-ease);
+}
+.standee[data-speaking] .glow {
+  filter: brightness(1.4);
+}
+
+@keyframes glow {
+  50% {
+    opacity: 0.88;
+  }
+}
+
+/* Movement is layered: the whole figure shifts its weight from the feet,
+   and the body breathes. */
+.figure {
+  position: relative;
+  aspect-ratio: var(--aspect);
+  user-select: none;
+  transform-origin: 50% 100%;
+  animation: sway 9s ease-in-out infinite;
+  will-change: transform;
+}
+
+.body {
+  position: absolute;
+  inset: 0;
+  /* The poses blend with each other, not with the page. */
+  isolation: isolate;
+  transform-origin: 50% 100%;
+  animation: breathe 4.8s ease-in-out infinite;
+  will-change: transform;
+}
+/* Seated at a desk: the furniture stays put, so only a gentle breath. */
+.standee[data-motion='sit'] .figure {
+  animation: none;
+}
+/* He lifts a little as he starts talking and settles back as he stops, so
+   the pose change reads as one movement. (Breathe keeps running: only the
+   second animation changes.) */
+.standee[data-speaking] .body {
+  animation:
+    breathe 4.8s ease-in-out infinite,
+    shift var(--pose-fade) var(--pose-ease);
+}
+.standee:not([data-speaking]) .body {
+  animation:
+    breathe 4.8s ease-in-out infinite,
+    settle var(--pose-fade) var(--pose-ease);
+}
+@keyframes shift {
+  50% {
+    translate: 0 -0.5%;
+  }
+}
+@keyframes settle {
+  50% {
+    translate: 0 0.35%;
+  }
+}
+
+/* A soft floor shadow to stand on. */
+.figure::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -1.5%;
+  height: 4%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent);
+  z-index: -1;
+}
+
+/* The two poses are stacked and crossfade; each carries its own eyelids and mouth. */
+.pose {
+  position: absolute;
+  inset: 0;
+  /* Own GPU layer: the fade is then just compositing, no repaint. */
+  will-change: opacity;
+}
+.pose img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* A faint halo softens the cut-out edge against the dark page. It sits on
+   the still photo, not on anything that moves, so the browser blurs it once
+   instead of on every animation frame. */
+.pose > img:first-child {
+  filter: drop-shadow(0 0 10px rgba(237, 237, 237, 0.1)) drop-shadow(0 24px 40px rgba(0, 0, 0, 0.5));
+}
+/* Typing: the hands patch taps in an uneven rhythm, like keystrokes. */
+.pose .typing {
+  position: absolute;
+  inset: 0;
+}
+.pose .typing img {
+  animation: type 1.15s ease-out infinite;
+  will-change: transform;
+}
+
+@keyframes type {
+  0%,
+  16%,
+  40%,
+  58%,
+  82%,
+  100% {
+    transform: none;
+  }
+  8% {
+    transform: translate(-0.15%, 0.6%);
+  }
+  28% {
+    transform: translate(0.3%, 0.45%);
+  }
+  48% {
+    transform: translate(0.05%, 0.65%);
+  }
+  70% {
+    transform: translate(-0.3%, 0.45%);
+  }
+  90% {
+    transform: translate(0.15%, 0.55%);
+  }
+}
+
+/* True crossfade: both poses fade together and add up (plus-lighter), so
+   where the photos match, the sum is exactly the original and nothing dips
+   or goes see-through; only what differs (the head) dissolves. */
+.pose {
+  mix-blend-mode: plus-lighter;
+  transition: opacity var(--pose-fade) var(--pose-ease);
+}
+.pose[data-pose='speaking'],
+.standee[data-speaking] .pose[data-pose='quiet'] {
+  opacity: 0;
+}
+.standee[data-speaking] .pose[data-pose='speaking'] {
+  opacity: 1;
+}
+
+/* Balloon above the head, shifted so the tail's tip lands on it (a page can
+   stop it going past the figure's left edge with --bubble-min-left). */
+.bubble {
+  --w: var(--standee-bubble-w, var(--standee-w, 260px));
+  /* Short enough to fit the space above the head; longer answers scroll. */
+  --lines: 4;
+  left: max(var(--bubble-min-left, -100vw), calc(var(--standee-w, 260px) * var(--head-x) - var(--w) * var(--tip-x)));
+  bottom: calc(100% - var(--bubble-space) + 4px);
+  z-index: 2;
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-0.25deg);
+  }
+  50% {
+    transform: rotate(0.3deg);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  45% {
+    transform: scale(1.003, 1.006);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure,
+  .standee[data-motion] .body,
+  .pose .typing img,
+  .glow {
+    animation: none;
+  }
+  /* As specific as the crossfade rules above, so it wins. */
+  .standee[data-motion] .pose[data-pose],
+  .glow {
+    transition: none;
+  }
+}

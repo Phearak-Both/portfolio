@@ -1,0 +1,9 @@
+node_modules
+dist
+*.local
+.DS_Store
+*.preview.png
+*.tsbuildinfo
+
+# Original 4K source art (~60 MB); only needed to rebuild src/assets
+source-images/

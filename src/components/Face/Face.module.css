@@ -1,0 +1,59 @@
+.face {
+  position: absolute;
+  inset: 0;
+}
+
+.lid,
+.mouth {
+  position: absolute;
+  display: block;
+}
+
+/* Eyelids: skin from the brow down, with a lash line along the bottom. Closed
+   for a moment every few seconds, sometimes twice in a row. */
+.lid {
+  border-radius: 50% 50% 50% 50% / 35% 35% 65% 65%;
+  background: linear-gradient(var(--skin) 55%, color-mix(in srgb, var(--skin), #6b3f30 35%) 82%, #2a120a 94%);
+  filter: blur(0.4px);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  animation: blink 7.2s infinite;
+}
+
+@keyframes blink {
+  0%,
+  37%,
+  41%,
+  88%,
+  91.5%,
+  93%,
+  96.5%,
+  100% {
+    transform: scaleY(0);
+  }
+  39%,
+  89.8%,
+  94.8% {
+    transform: scaleY(1);
+  }
+}
+
+/* Mouth: a dark opening along the lip line that opens and closes while the line types out. */
+.mouth {
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #3a1210, #6b2a25 70%, rgba(167, 88, 81, 0));
+  transform: scaleY(0);
+  animation: talk 0.24s ease-in-out calc(var(--syllables) * 2) alternate;
+}
+
+@keyframes talk {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mouth {
+    animation: none;
+  }
+}

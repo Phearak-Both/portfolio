@@ -1,0 +1,78 @@
+/* The standing Memoji on the left, everything else on the right. Sized so
+   head to toe (plus the balloon above) fits between the nav and the chat dock. */
+.layout {
+  --standee-w: clamp(180px, min(22vw, calc((100svh - 340px) / 2.32)), 280px);
+  --standee-bubble-w: 290px;
+  --bubble-min-left: 0px;
+  display: grid;
+  grid-template-columns: var(--standee-w) 1fr;
+  gap: clamp(32px, 6vw, 88px);
+  align-items: start;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: clamp(32px, 4vw, 52px);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: clamp(32px, 6vw, 80px);
+}
+
+.areas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.areas li {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+}
+
+.n {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+
+@media (max-width: 1100px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Phone: he stands beside the heading, the balloon to the right of his head. */
+@media (max-width: 760px) {
+  .layout {
+    --standee-w: 120px;
+    grid-template-columns: var(--standee-w) 1fr;
+    gap: 0 20px;
+  }
+  .side {
+    grid-row: 1;
+    --standee-bubble-w: min(290px, calc(100vw - 2 * var(--gutter)));
+  }
+  .main {
+    display: contents;
+  }
+  .head {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    margin-bottom: 0;
+  }
+  .columns {
+    grid-column: 1 / -1;
+    margin-top: 32px;
+  }
+}

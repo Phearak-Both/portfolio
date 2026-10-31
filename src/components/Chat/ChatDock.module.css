@@ -1,0 +1,151 @@
+.dock {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + var(--kb-inset, 0px) + env(safe-area-inset-bottom));
+  z-index: 40;
+  width: min(660px, calc(100% - 2 * var(--gutter)));
+  transform: translateX(-50%);
+}
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 20px;
+  background: rgba(20, 20, 20, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 24px 60px -20px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(237, 237, 237, 0.05);
+  transition: border-color 0.3s var(--ease-out);
+}
+
+.shell:focus-within {
+  border-color: rgba(237, 237, 237, 0.26);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px 8px;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ink-mute);
+}
+
+.badge::before {
+  content: '[';
+}
+.badge::after {
+  content: ']';
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 6px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+.error button {
+  padding: 4px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: none;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: var(--bg);
+  font-size: 15px;
+  transition: border-color 0.2s var(--ease-out);
+}
+.input::placeholder {
+  color: var(--ink-mute);
+}
+.input:hover {
+  border-color: var(--line-strong);
+}
+.input:focus-visible {
+  outline: none;
+  border-color: rgba(237, 237, 237, 0.4);
+}
+
+.send {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--ink);
+  color: var(--bg);
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.2s var(--ease-out);
+}
+.send:hover:not(:disabled) {
+  opacity: 0.85;
+}
+.send:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.send svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 12.5px;
+  }
+  .input {
+    /* 16px stops iOS from zooming on focus. */
+    font-size: 16px;
+    height: 44px;
+  }
+  .send {
+    width: 44px;
+    height: 44px;
+  }
+}
